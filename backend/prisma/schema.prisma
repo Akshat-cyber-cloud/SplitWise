@@ -1,0 +1,148 @@
+// This is your Prisma schema file.
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  memberships     GroupMembership[]
+  paidExpenses    Expense[]         @relation("PaidBy")
+  expenseSplits   ExpenseSplit[]
+  sentPayments    Payment[]         @relation("FromUser")
+  receivedPayments Payment[]        @relation("ToUser")
+
+  @@map("users")
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  memberships GroupMembership[]
+  expenses    Expense[]
+  payments    Payment[]
+
+  @@map("groups")
+}
+
+// Tracks WHEN a user was in a group.
+// Expenses outside joined_at/left_at window do NOT affect this user's balance.
+model GroupMembership {
+  id       Int       @id @default(autoincrement())
+  groupId  Int       @map("group_id")
+  userId   Int       @map("user_id")
+  joinedAt DateTime  @default(now()) @map("joined_at")
+  leftAt   DateTime? @map("left_at")   // null = still a member
+
+  group Group @relation(fields: [groupId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([groupId, userId])
+  @@map("group_memberships")
+}
+
+enum SplitType {
+  EQUAL
+  EXACT
+  PERCENTAGE
+  SHARES
+}
+
+model Expense {
+  id            Int       @id @default(autoincrement())
+  groupId       Int       @map("group_id")
+  paidById      Int       @map("paid_by")
+  amount        Decimal   @db.Decimal(12, 2)          // original amount
+  currency      String    @default("INR")
+  amountInInr   Decimal   @map("amount_in_inr") @db.Decimal(12, 2)
+  exchangeRate  Decimal   @map("exchange_rate") @db.Decimal(10, 6) @default(1)
+  description   String
+  date          DateTime  @db.Date
+  splitType     SplitType @map("split_type")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  importBatchId Int?      @map("import_batch_id")
+
+  group   Group         @relation(fields: [groupId], references: [id])
+  paidBy  User          @relation("PaidBy", fields: [paidById], references: [id])
+  splits  ExpenseSplit[]
+  batch   ImportBatch?  @relation(fields: [importBatchId], references: [id])
+
+  @@map("expenses")
+}
+
+// One row per person per expense.
+// Always stores the FINAL computed INR share — no split type math needed at query time.
+model ExpenseSplit {
+  id          Int     @id @default(autoincrement())
+  expenseId   Int     @map("expense_id")
+  userId      Int     @map("user_id")
+  shareAmount Decimal @map("share_amount") @db.Decimal(12, 2)
+
+  expense Expense @relation(fields: [expenseId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([expenseId, userId])
+  @@map("expense_splits")
+}
+
+model Payment {
+  id         Int      @id @default(autoincrement())
+  groupId    Int      @map("group_id")
+  fromUserId Int      @map("from_user")
+  toUserId   Int      @map("to_user")
+  amount     Decimal  @db.Decimal(12, 2)
+  date       DateTime @db.Date
+  note       String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  group    Group @relation(fields: [groupId], references: [id])
+  fromUser User  @relation("FromUser", fields: [fromUserId], references: [id])
+  toUser   User  @relation("ToUser", fields: [toUserId], references: [id])
+
+  @@map("payments")
+}
+
+model ImportBatch {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+
+  expenses  Expense[]
+  anomalies ImportAnomaly[]
+
+  @@map("import_batches")
+}
+
+enum AnomalyStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ImportAnomaly {
+  id              Int           @id @default(autoincrement())
+  batchId         Int           @map("batch_id")
+  rowData         Json          @map("row_data")      // raw CSV row as JSON
+  detectorName    String        @map("detector_name") // e.g. "duplicate", "negative_amount"
+  suggestedAction String        @map("suggested_action")
+  status          AnomalyStatus @default(PENDING)
+  resolvedAt      DateTime?     @map("resolved_at")
+
+  batch ImportBatch @relation(fields: [batchId], references: [id])
+
+  @@map("import_anomalies")
+}
