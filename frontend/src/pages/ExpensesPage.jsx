@@ -3,15 +3,15 @@ import { useParams } from 'react-router-dom';
 import api from '../api/axios';
 
 const SPLIT_TYPES = ['EQUAL', 'EXACT', 'PERCENTAGE', 'SHARES'];
-const CURRENCIES  = ['INR', 'USD', 'EUR', 'GBP', 'SGD', 'AED'];
+const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP', 'SGD', 'AED'];
 
 export default function ExpensesPage() {
   const { groupId } = useParams();
-  const [expenses, setExpenses]   = useState([]);
-  const [members, setMembers]     = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [showForm, setShowForm]   = useState(false);
-  const [error, setError]         = useState('');
+  const [expenses, setExpenses] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
 
   const blankForm = {
     description: '', amount: '', currency: 'INR', paidById: '',

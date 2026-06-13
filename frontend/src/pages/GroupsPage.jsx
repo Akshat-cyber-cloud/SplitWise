@@ -4,8 +4,8 @@ import api from '../api/axios';
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState([]);
-  const [name, setName]     = useState('');
-  const [error, setError]   = useState('');
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   const fetchGroups = async () => {

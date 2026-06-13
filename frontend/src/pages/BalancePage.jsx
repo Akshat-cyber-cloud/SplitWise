@@ -6,9 +6,9 @@ export default function BalancePage() {
   const { groupId } = useParams();
   const [balances, setBalances] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [detail, setDetail]     = useState(null);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState('');
+  const [detail, setDetail] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     api.get(`/balances/groups/${groupId}`)
@@ -94,7 +94,7 @@ export default function BalancePage() {
               <section>
                 <p style={{ fontWeight: 600, marginBottom: 8 }}>Settlements</p>
                 {[...detail.breakdown.sentPayments.map((p) => ({ ...p, dir: 'sent' })),
-                  ...detail.breakdown.receivedPayments.map((p) => ({ ...p, dir: 'received' }))
+                ...detail.breakdown.receivedPayments.map((p) => ({ ...p, dir: 'received' }))
                 ].sort((a, b) => new Date(a.date) - new Date(b.date)).map((p) => (
                   <div key={`${p.dir}-${p.id}`} className="flex-between" style={{ padding: '6px 0', borderBottom: '1px solid var(--color-border)' }}>
                     <span className="text-muted">{p.dir === 'sent' ? 'Paid out' : 'Received'}</span>

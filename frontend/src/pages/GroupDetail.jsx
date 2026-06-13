@@ -4,9 +4,9 @@ import api from '../api/axios';
 
 export default function GroupDetail() {
   const { groupId } = useParams();
-  const [group, setGroup]     = useState(null);
+  const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     api.get(`/groups/${groupId}`)
@@ -16,7 +16,7 @@ export default function GroupDetail() {
   }, [groupId]);
 
   if (loading) return <div className="loading">Loading…</div>;
-  if (error)   return <div className="error-msg">{error}</div>;
+  if (error) return <div className="error-msg">{error}</div>;
 
   return (
     <div>
@@ -27,9 +27,9 @@ export default function GroupDetail() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, marginBottom: 32 }}>
         {[
-          { label: '💸 Expenses',  to: `/groups/${groupId}/expenses`, desc: 'Add & view expenses' },
-          { label: '📊 Balances',  to: `/groups/${groupId}/balances`, desc: 'Who owes whom' },
-          { label: '📥 Import CSV', to: `/groups/${groupId}/import`,  desc: 'Bulk import expenses' },
+          { label: '💸 Expenses', to: `/groups/${groupId}/expenses`, desc: 'Add & view expenses' },
+          { label: '📊 Balances', to: `/groups/${groupId}/balances`, desc: 'Who owes whom' },
+          { label: '📥 Import CSV', to: `/groups/${groupId}/import`, desc: 'Bulk import expenses' },
         ].map((item) => (
           <Link key={item.to} to={item.to} style={{ textDecoration: 'none' }}>
             <div className="card" style={{ cursor: 'pointer' }}
