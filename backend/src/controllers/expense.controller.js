@@ -112,6 +112,14 @@ const updateExpense = asyncHandler(async (req, res) => {
   res.json(expense);
 });
 
+// GET /api/expenses/exchange-rate
+const getRate = asyncHandler(async (req, res) => {
+  const { from, to, date } = req.query;
+  if (!from || !to) return res.status(400).json({ error: 'from and to are required' });
+  const rate = await getExchangeRate(from, to, date || new Date());
+  res.json({ rate });
+});
+
 // DELETE /api/expenses/:id
 const deleteExpense = asyncHandler(async (req, res) => {
   await prisma.$transaction([
@@ -121,4 +129,4 @@ const deleteExpense = asyncHandler(async (req, res) => {
   res.status(204).send();
 });
 
-module.exports = { createExpense, listExpenses, getExpense, updateExpense, deleteExpense };
+module.exports = { createExpense, listExpenses, getExpense, updateExpense, deleteExpense, getRate };

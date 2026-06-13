@@ -10,6 +10,7 @@ import ExpensesPage from './pages/ExpensesPage';
 import ImportPage   from './pages/ImportPage';
 import AnomalyPage  from './pages/AnomalyPage';
 import BalancePage  from './pages/BalancePage';
+import ProfilePage  from './pages/ProfilePage';
 
 function PrivateRoute({ children }) {
   const { token } = useAuth();
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="groups/:groupId/import"   element={<ImportPage />} />
           <Route path="groups/:groupId/import/:batchId/anomalies" element={<AnomalyPage />} />
           <Route path="groups/:groupId/balances" element={<BalancePage />} />
+          <Route path="profile"                  element={<ProfilePage />} />
         </Route>
       </Routes>
     </AuthProvider>

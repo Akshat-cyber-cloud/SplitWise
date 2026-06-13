@@ -24,26 +24,54 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-center" style={{ minHeight: '100vh' }}>
-      <div className="card" style={{ width: 380 }}>
-        <h1 style={{ marginBottom: 8, color: 'var(--color-primary)' }}>SharedSplit</h1>
-        <p className="text-muted" style={{ marginBottom: 24 }}>Sign in to your account</p>
-        {error && <div className="error-msg">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Email</label>
-            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-10">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-teal-800 tracking-tight mb-2">SharedSplit</h1>
+          <p className="text-slate-500">Sign in to your account</p>
+        </div>
+        
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-red-50 text-red-600 text-sm font-medium border border-red-100">
+            {error}
           </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        )}
+        
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-slate-600">Email</label>
+            <input 
+              id="email" 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+              className="form-input"
+            />
           </div>
-          <button id="login-btn" type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-slate-600">Password</label>
+            <input 
+              id="password" 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+              className="form-input"
+            />
+          </div>
+          <button 
+            id="login-btn" 
+            type="submit" 
+            className="btn btn-primary mt-2 w-full text-base py-3" 
+            disabled={loading}
+          >
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
-        <p className="text-muted" style={{ marginTop: 16, textAlign: 'center' }}>
-          No account? <Link to="/register">Register</Link>
+        
+        <p className="mt-8 text-center text-sm text-slate-500">
+          Don't have an account? <Link to="/register" className="font-medium text-teal-700 hover:text-teal-800 transition-colors">Register</Link>
         </p>
       </div>
     </div>

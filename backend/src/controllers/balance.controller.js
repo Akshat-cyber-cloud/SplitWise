@@ -83,19 +83,31 @@ async function _calcBalance(groupId, userId, joinedAt, leftAt) {
   // Payments SENT by this user in the group
   const sentPayments = await prisma.payment.findMany({
     where: { groupId, fromUserId: userId },
-    select: { id: true, amount: true, date: true, toUserId: true },
+    select: {
+      id: true,
+      amount: true,
+      date: true,
+      toUserId: true,
+      toUser: { select: { name: true } },
+    },
   });
   const totalSent = sentPayments.reduce((s, p) => s + Number(p.amount), 0);
 
   // Payments RECEIVED by this user in the group
   const receivedPayments = await prisma.payment.findMany({
     where: { groupId, toUserId: userId },
-    select: { id: true, amount: true, date: true, fromUserId: true },
+    select: {
+      id: true,
+      amount: true,
+      date: true,
+      fromUserId: true,
+      fromUser: { select: { name: true } },
+    },
   });
   const totalReceived = receivedPayments.reduce((s, p) => s + Number(p.amount), 0);
 
-  // Net = paid - owed - sent + received
-  const netBalance = totalPaid - totalOwed - totalSent + totalReceived;
+  // Net = paid - owed + sent - received
+  const netBalance = totalPaid - totalOwed + totalSent - totalReceived;
 
   return {
     netBalance: Math.round(netBalance * 100) / 100,  // round to nearest paisa
@@ -113,4 +125,58 @@ async function _calcBalance(groupId, userId, joinedAt, leftAt) {
   };
 }
 
-module.exports = { groupBalances, memberBalance };
+// GET /api/balances/dashboard
+const dashboardSummary = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  
+  // Find all groups the user belongs to
+  const memberships = await prisma.groupMembership.findMany({
+    where: { userId, leftAt: null },
+    include: {
+      group: {
+        include: {
+          memberships: {
+            where: { leftAt: null },
+            include: { user: { select: { id: true, name: true, email: true } } }
+          }
+        }
+      }
+    }
+  });
+
+  const summary = await Promise.all(memberships.map(async (m) => {
+    const group = m.group;
+    const balance = await _calcBalance(group.id, userId, m.joinedAt, m.leftAt);
+    return {
+      groupId: group.id,
+      groupName: group.name,
+      createdAt: group.createdAt,
+      memberCount: group.memberships.length,
+      members: group.memberships.map(gm => gm.user),
+      userBalance: balance.netBalance,
+    };
+  }));
+
+  // Aggregate totals
+  let totalBalance = 0;
+  let youAreOwed = 0;
+  let youOwe = 0;
+
+  summary.forEach(item => {
+    totalBalance += item.userBalance;
+    if (item.userBalance > 0) {
+      youAreOwed += item.userBalance;
+    } else if (item.userBalance < 0) {
+      youOwe += Math.abs(item.userBalance);
+    }
+  });
+
+  res.json({
+    totalBalance: Math.round(totalBalance * 100) / 100,
+    youAreOwed: Math.round(youAreOwed * 100) / 100,
+    youOwe: Math.round(youOwe * 100) / 100,
+    groups: summary
+  });
+});
+
+module.exports = { groupBalances, memberBalance, dashboardSummary };

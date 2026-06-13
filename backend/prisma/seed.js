@@ -70,6 +70,9 @@ async function main() {
     },
   });
 
+  // Reset PostgreSQL sequence for group table to avoid unique constraint errors on id
+  await prisma.$executeRawUnsafe(`SELECT setval('groups_id_seq', COALESCE((SELECT MAX(id) FROM groups), 1));`);
+
   console.log('Seed complete:', { alice, bob, group, expense });
 }
 

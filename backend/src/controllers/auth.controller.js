@@ -46,4 +46,38 @@ const me = asyncHandler(async (req, res) => {
   res.json(user);
 });
 
-module.exports = { register, login, me };
+// GET /api/auth/users
+const listUsers = asyncHandler(async (req, res) => {
+  const users = await prisma.user.findMany({
+    select: { id: true, name: true, email: true },
+    orderBy: { name: 'asc' },
+  });
+  res.json(users);
+});
+
+// PUT /api/auth/profile
+const updateProfile = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+  const data = {};
+  if (name) data.name = name;
+  if (email) {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing && existing.id !== req.user.id) {
+      return res.status(409).json({ error: 'Email already in use' });
+    }
+    data.email = email;
+  }
+  if (password) {
+    data.passwordHash = await bcrypt.hash(password, 10);
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: req.user.id },
+    data,
+    select: { id: true, name: true, email: true },
+  });
+
+  res.json(updated);
+});
+
+module.exports = { register, login, me, listUsers, updateProfile };

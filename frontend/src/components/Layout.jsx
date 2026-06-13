@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
@@ -8,31 +8,67 @@ export default function Layout() {
   const handleLogout = () => { logout(); navigate('/login'); };
 
   const navCls = ({ isActive }) =>
-    `sidebar-link${isActive ? ' active' : ''}`;
+    `block px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+      isActive 
+        ? 'bg-teal-50 text-teal-800' 
+        : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+    }`;
 
   return (
-    <div className="page-wrapper">
-      <aside className="sidebar">
-        <div style={{ marginBottom: 24 }}>
-          <h2 style={{ color: 'var(--color-primary)', letterSpacing: '-0.5px' }}>SharedSplit</h2>
-          <p className="text-muted" style={{ marginTop: 4 }}>{user?.name}</p>
+    <div className="flex min-h-screen bg-slate-50">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white border-r border-slate-200 p-6 flex flex-col gap-2 shrink-0">
+        <div className="mb-8">
+          <h2 className="text-xl font-bold text-teal-800 tracking-tight">SharedSplit</h2>
+          <Link to="/profile" className="mt-4 flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors group">
+            <div className="w-10 h-10 rounded-full bg-teal-50 text-teal-800 flex items-center justify-center font-bold border border-teal-100 group-hover:bg-teal-100 transition-colors">
+              {user?.name?.[0]?.toUpperCase() || 'U'}
+            </div>
+            <div className="overflow-hidden flex-1">
+              <p className="text-sm font-bold text-slate-900 truncate group-hover:text-teal-800 transition-colors">{user?.name}</p>
+              <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+            </div>
+          </Link>
         </div>
-        <NavLink to="/groups" className={navCls}>📂 Groups</NavLink>
-        <div style={{ flex: 1 }} />
-        <button className="btn btn-ghost btn-sm" onClick={handleLogout}>Sign out</button>
+        
+        <nav className="flex flex-col gap-1">
+          <NavLink to="/groups" className={navCls}>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Groups
+            </div>
+          </NavLink>
+          
+          <NavLink to="/profile" className={navCls}>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Settings
+            </div>
+          </NavLink>
+        </nav>
+        
+        <div className="flex-1" />
+        
+        <button 
+          className="btn btn-ghost w-full justify-start text-sm text-slate-500 hover:text-slate-900"
+          onClick={handleLogout}
+        >
+          <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sign out
+        </button>
       </aside>
-      <main className="main-content">
+      
+      {/* Main Content */}
+      <main className="flex-1 p-8 md:p-12 overflow-y-auto max-w-5xl mx-auto w-full">
         <Outlet />
       </main>
-      <style>{`
-        .sidebar-link {
-          display: block; padding: 10px 12px; border-radius: 8px;
-          color: var(--color-muted); font-size: 0.9rem; font-weight: 500;
-          transition: all 0.15s;
-        }
-        .sidebar-link:hover { background: var(--color-surface2); color: var(--color-text); }
-        .sidebar-link.active { background: rgba(108,99,255,.15); color: var(--color-primary); }
-      `}</style>
     </div>
   );
 }
