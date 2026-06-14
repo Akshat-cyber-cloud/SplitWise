@@ -28,7 +28,7 @@ export default function Layout() {
       <aside className="w-64 bg-white border-r-2 border-slate-900 p-6 flex flex-col gap-2 shrink-0 z-20 shadow-[4px_0_0_0_rgba(15,23,42,0.02)]">
         <div className="mb-8">
           <Link to="/" className="text-2xl font-black text-slate-900 tracking-wider font-mono hover:opacity-85 transition-opacity block mb-6">
-            COIЗON
+            CLAR<span className="text-teal-700">i</span><span className="text-slate-400">°</span>
           </Link>
           
           <Link to="/profile" className="mt-4 flex items-center gap-3 p-3 rounded-xl border-2 border-slate-900 bg-white shadow-[3px_3px_0px_#0f172a] hover:bg-slate-50 transition-all group">

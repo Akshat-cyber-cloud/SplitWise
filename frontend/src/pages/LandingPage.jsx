@@ -46,7 +46,7 @@ export default function LandingPage() {
       <header className="w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <span className="text-2xl font-black text-slate-900 tracking-wider font-mono">
-            COIЗON
+            CLAR<span className="text-teal-700">i</span><span className="text-slate-400">°</span>
           </span>
         </div>
 
@@ -91,8 +91,8 @@ export default function LandingPage() {
           
           {/* Main Heading */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.05] max-w-2xl">
-            Money tracking <br />
-            easier and faster
+            Split smarter.<br />
+            Settle <span className="text-teal-700">clearer</span>.
           </h1>
 
           {/* Cards Graphical Area */}

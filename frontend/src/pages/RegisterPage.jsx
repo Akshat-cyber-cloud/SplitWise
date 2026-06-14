@@ -36,10 +36,10 @@ export default function RegisterPage() {
       <div className="w-full max-w-md bg-white rounded-2xl border-2 border-slate-900 p-8 sm:p-10 shadow-[6px_6px_0px_#0f172a] relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block text-2xl font-black text-slate-900 tracking-wider font-mono mb-3 hover:opacity-85 transition-opacity">
-            COIЗON
+            CLAR<span className="text-teal-700">i</span><span className="text-slate-400">°</span>
           </Link>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Create account</h1>
-          <p className="text-slate-500 text-sm">Start tracking shared expenses</p>
+          <p className="text-slate-500 text-sm">Join Clario — split smarter</p>
         </div>
         
         {error && (
