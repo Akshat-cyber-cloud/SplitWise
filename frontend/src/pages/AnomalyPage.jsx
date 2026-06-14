@@ -61,7 +61,7 @@ export default function AnomalyPage() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Breadcrumbs */}
-      <nav className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+      <nav className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
         <Link to="/groups" className="hover:text-teal-800 transition-colors">Dashboard</Link>
         <span>/</span>
         <Link to={`/groups/${groupId}`} className="hover:text-teal-800 transition-colors">{group?.name}</Link>
@@ -72,61 +72,61 @@ export default function AnomalyPage() {
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Anomaly Review</h1>
-        <p className="text-slate-500 mt-1">
-          Batch #{batchId} — <span className="font-semibold text-teal-800">{pending.length} pending</span>, {resolved.length} resolved
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Anomaly Review</h1>
+        <p className="text-slate-500 mt-1.5 text-sm font-medium">
+          Batch #{batchId} — <span className="font-extrabold text-teal-800">{pending.length} pending</span>, {resolved.length} resolved
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-red-50 text-red-600 text-sm font-semibold border border-red-100">
+        <div className="mb-6 p-4 rounded-xl bg-rose-50 text-rose-700 text-sm font-semibold border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a]">
           {error}
         </div>
       )}
 
       {/* Pending Anomalies */}
-      <div className="space-y-6">
+      <div className="space-y-8">
         {pending.map((a) => (
-          <div key={a.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 relative overflow-hidden animate-in fade-in duration-200">
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+          <div key={a.id} className="bg-white rounded-2xl p-6 border-2 border-slate-900 shadow-[5px_5px_0px_#0f172a] relative overflow-hidden animate-in fade-in duration-200 pl-8">
+            <div className="absolute top-0 left-0 w-2.5 h-full bg-amber-400 border-r-2 border-slate-900"></div>
             
             <div className="flex justify-between items-center mb-4">
-              <span className="inline-block px-3 py-1 bg-amber-50 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wider">
+              <span className="inline-block px-3 py-1 bg-amber-100 text-amber-900 text-xs font-black rounded-full uppercase tracking-wider border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#0f172a]">
                 {a.detectorName}
               </span>
-              <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold rounded-full uppercase tracking-wider">
+              <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-black rounded-full uppercase tracking-wider border border-slate-300">
                 PENDING REVIEW
               </span>
             </div>
 
-            <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl mb-4 font-mono text-xs text-slate-600 overflow-x-auto">
+            <div className="bg-slate-50 border-2 border-slate-900 p-4 rounded-xl mb-4 font-mono text-xs text-slate-700 overflow-x-auto shadow-[1.5px_1.5px_0px_rgba(0,0,0,0.05)]">
               <pre>{JSON.stringify(a.rowData, null, 2)}</pre>
             </div>
 
-            <p className="text-sm text-slate-700 mb-6">
-              <strong className="text-slate-900 font-bold">Suggested Action:</strong> {a.suggestedAction}
+            <p className="text-sm text-slate-700 mb-6 leading-relaxed">
+              <strong className="text-slate-950 font-black">Suggested Action:</strong> {a.suggestedAction}
             </p>
 
-            <div className="flex gap-3 pt-4 border-t border-slate-50">
+            <div className="flex gap-4 pt-4 border-t-2 border-dashed border-slate-200">
               <button
                 id={`reject-${a.id}`}
-                className="btn btn-secondary text-red-600 hover:text-red-700 hover:bg-red-50/50 flex items-center justify-center gap-1.5 px-6"
+                className="px-5 py-2.5 rounded-xl border-2 border-slate-900 bg-red-50 text-red-700 font-extrabold text-xs shadow-[2.5px_2.5px_0px_#0f172a] hover:bg-red-100 hover:shadow-[1px_1px_0px_#0f172a] hover:translate-x-[1.5px] hover:translate-y-[1.5px] active:translate-x-[2.5px] active:translate-y-[2.5px] active:shadow-none transition-all flex items-center justify-center gap-1.5"
                 disabled={actionLoading}
                 onClick={() => resolve(a.id, 'REJECTED')}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg className="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Reject Row
               </button>
               <button
                 id={`approve-${a.id}`}
-                className="btn btn-primary flex items-center justify-center gap-1.5 px-6 ml-auto"
+                className="px-5 py-2.5 rounded-xl border-2 border-slate-900 bg-teal-800 hover:bg-teal-700 text-white font-extrabold text-xs shadow-[3px_3px_0px_#0f172a] hover:shadow-[1px_1px_0px_#0f172a] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-1.5 ml-auto"
                 disabled={actionLoading}
                 onClick={() => resolve(a.id, 'APPROVED')}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg className="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
                 Approve & Save
               </button>
@@ -135,9 +135,9 @@ export default function AnomalyPage() {
         ))}
 
         {pending.length === 0 && (
-          <div className="py-8 text-center bg-green-50/30 rounded-2xl border border-green-100/30 text-green-700 font-semibold text-sm flex flex-col items-center justify-center gap-2">
-            <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div className="py-8 text-center bg-[#e6f4ea] rounded-2xl border-2 border-slate-900 text-emerald-800 font-extrabold text-sm flex flex-col items-center justify-center gap-3 shadow-[4px_4px_0px_#0f172a]">
+            <svg className="w-10 h-10 text-emerald-700 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             All anomalies have been resolved!
           </div>
@@ -146,21 +146,21 @@ export default function AnomalyPage() {
 
       {/* Resolved History */}
       {resolved.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 mt-8">
-          <h3 className="text-lg font-bold text-slate-900 mb-4">Resolved Anomalies</h3>
-          <div className="divide-y divide-slate-100">
+        <div className="bg-white rounded-2xl border-2 border-slate-900 p-6 md:p-8 mt-8 shadow-[4px_4px_0px_#0f172a]">
+          <h3 className="text-lg font-black text-slate-900 mb-4">Resolved Anomalies</h3>
+          <div className="divide-y-2 divide-slate-200 divide-dashed">
             {resolved.map((a) => (
-              <div key={a.id} className="flex justify-between items-center py-3">
+              <div key={a.id} className="flex justify-between items-center py-4">
                 <div className="flex flex-col">
-                  <span className="font-semibold text-slate-700 text-sm">
-                    {a.detectorName} &mdash; <span className="font-normal text-slate-500 font-mono text-xs">{a.rowData?.description || 'Row'}</span>
+                  <span className="font-extrabold text-slate-800 text-sm">
+                    {a.detectorName} &mdash; <span className="font-mono text-xs text-slate-500 font-medium">{a.rowData?.description || 'Row'}</span>
                   </span>
-                  <span className="text-[10px] text-slate-400 font-medium">
+                  <span className="text-[10px] text-slate-400 font-bold mt-0.5 uppercase tracking-wider">
                     Resolved
                   </span>
                 </div>
-                <span className={`inline-block px-2.5 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-wider ${
-                  a.status === 'APPROVED' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                <span className={`inline-block px-2.5 py-0.5 text-[9px] font-black rounded-full uppercase tracking-wider border ${
+                  a.status === 'APPROVED' ? 'bg-[#e6f4ea] text-emerald-800 border-emerald-800/20' : 'bg-[#fce8e6] text-rose-800 border-rose-800/20'
                 }`}>
                   {a.status}
                 </span>

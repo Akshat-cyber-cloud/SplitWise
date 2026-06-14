@@ -153,19 +153,19 @@ export default function GroupDetail() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Breadcrumbs */}
-      <nav className="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+      <nav className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
         <Link to="/groups" className="hover:text-teal-800 transition-colors">Dashboard</Link>
         <span>/</span>
         <span className="text-slate-600">{group?.name}</span>
       </nav>
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 pb-6 border-b border-slate-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 pb-6 border-b-2 border-slate-200">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{group?.name}</h1>
-          <p className="text-slate-500 mt-1 flex items-center gap-2 text-sm font-medium">
-            <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">{group?.name}</h1>
+          <p className="text-slate-500 mt-1.5 flex items-center gap-2 text-sm font-semibold">
+            <svg className="w-4 h-4 text-slate-500 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
             {activeMembersCount} active members
           </p>
@@ -174,16 +174,20 @@ export default function GroupDetail() {
           <button
             id="tour-settle-up-btn"
             onClick={() => setIsSettleUpOpen(true)}
-            className="btn btn-secondary flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 text-slate-900 font-bold text-sm shadow-[3px_3px_0px_#0f172a] hover:shadow-[1px_1px_0px_#0f172a] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px] transition-all flex items-center gap-1.5"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg className="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             Settle Up
           </button>
-          <Link id="tour-add-expense-btn" to={`/groups/${groupId}/expenses`} className="btn btn-primary flex items-center gap-1.5">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <Link 
+            id="tour-add-expense-btn" 
+            to={`/groups/${groupId}/expenses`} 
+            className="px-5 py-2.5 rounded-xl border-2 border-slate-900 bg-teal-800 hover:bg-teal-700 text-white font-bold text-sm shadow-[3px_3px_0px_#0f172a] hover:shadow-[1px_1px_0px_#0f172a] hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[3px] active:translate-y-[3px] transition-all flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
             Add Expense
           </Link>
@@ -191,7 +195,7 @@ export default function GroupDetail() {
       </div>
 
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-red-50 text-red-600 text-sm font-semibold border border-red-100">
+        <div className="mb-6 p-4 rounded-xl bg-rose-50 text-rose-700 text-sm font-semibold border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a]">
           {error}
         </div>
       )}
@@ -202,48 +206,48 @@ export default function GroupDetail() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Group Balance Summary Card */}
-          <div id="tour-balance-summary" className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h3 className="text-lg font-semibold text-slate-900">Group Balance Summary</h3>
-              <Link to={`/groups/${groupId}/balances`} className="text-sm font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1">
+          <div id="tour-balance-summary" className="bg-white rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_#0f172a] overflow-hidden">
+            <div className="px-6 py-5 border-b-2 border-slate-900 flex justify-between items-center bg-slate-50/50">
+              <h3 className="text-lg font-black text-slate-900">Group Balance Summary</h3>
+              <Link to={`/groups/${groupId}/balances`} className="text-sm font-extrabold text-teal-800 hover:text-teal-950 flex items-center gap-1">
                 Drill-down Ledger &rarr;
               </Link>
             </div>
             
-            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white">
               {balances.filter(b => !b.leftAt).map((b) => (
                 <Link
                   key={b.user.id}
                   to={`/groups/${groupId}/balances?userId=${b.user.id}`}
-                  className="p-4 rounded-xl border border-slate-100 flex items-center justify-between bg-slate-50/20 hover:border-teal-200 hover:bg-slate-50 transition-all duration-150 group"
+                  className="p-4 rounded-xl border-2 border-slate-900 flex items-center justify-between bg-white hover:bg-slate-50 shadow-[2px_2px_0px_#0f172a] hover:shadow-[3.5px_3.5px_0px_#0f172a] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] transition-all duration-150 group"
                 >
                   <div>
-                    <p className="font-bold text-slate-900 group-hover:text-teal-800 transition-colors">{b.user.name}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="font-extrabold text-slate-900 group-hover:text-teal-800 transition-colors">{b.user.name}</p>
+                    <p className="text-xs text-slate-400 font-bold mt-0.5">
                       Paid: ₹{b.totalPaid.toFixed(2)}
                     </p>
                   </div>
                   <div className="text-right">
                     {b.netBalance > 0 ? (
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                        <span className="text-[9px] uppercase tracking-wider font-black text-emerald-800 bg-[#e6f4ea] px-2 py-0.5 rounded-full border border-emerald-800/10">
                           owed
                         </span>
-                        <p className="text-sm font-bold text-green-600 mt-1">₹{b.netBalance.toFixed(2)}</p>
+                        <p className="text-sm font-black font-mono text-emerald-700 mt-1">₹{b.netBalance.toFixed(2)}</p>
                       </div>
                     ) : b.netBalance < 0 ? (
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
+                        <span className="text-[9px] uppercase tracking-wider font-black text-rose-800 bg-[#fce8e6] px-2 py-0.5 rounded-full border border-rose-800/10">
                           owes
                         </span>
-                        <p className="text-sm font-bold text-red-600 mt-1">₹{Math.abs(b.netBalance).toFixed(2)}</p>
+                        <p className="text-sm font-black font-mono text-rose-700 mt-1">₹{Math.abs(b.netBalance).toFixed(2)}</p>
                       </div>
                     ) : (
                       <div>
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                        <span className="text-[9px] uppercase tracking-wider font-black text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-300">
                           settled
                         </span>
-                        <p className="text-sm font-bold text-slate-400 mt-1">₹0.00</p>
+                        <p className="text-sm font-black font-mono text-slate-400 mt-1">₹0.00</p>
                       </div>
                     )}
                   </div>
@@ -253,31 +257,31 @@ export default function GroupDetail() {
           </div>
 
           {/* Recent Expenses List */}
-          <div id="tour-recent-expenses" className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h3 className="text-lg font-semibold text-slate-900">Recent Expenses</h3>
-              <Link to={`/groups/${groupId}/expenses`} className="text-sm font-semibold text-teal-700 hover:text-teal-800">
+          <div id="tour-recent-expenses" className="bg-white rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_#0f172a] overflow-hidden">
+            <div className="px-6 py-5 border-b-2 border-slate-900 flex justify-between items-center bg-slate-50/50">
+              <h3 className="text-lg font-black text-slate-900">Recent Expenses</h3>
+              <Link to={`/groups/${groupId}/expenses`} className="text-sm font-extrabold text-teal-800 hover:text-teal-950">
                 View all &rarr;
               </Link>
             </div>
             
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y-2 divide-slate-200 divide-dashed bg-white">
               {expenses.map((e) => (
                 <div key={e.id} className="p-6 hover:bg-slate-50 transition-colors flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold">
+                    <div className="w-10 h-10 rounded-full bg-teal-100 text-slate-900 flex items-center justify-center font-black border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#0f172a]">
                       {e.paidBy?.name?.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">{e.description}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="font-extrabold text-slate-900">{e.description}</p>
+                      <p className="text-xs text-slate-500 font-medium mt-0.5">
                         {new Date(e.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} • Paid by {e.paidBy?.name}
                       </p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     {formatCurrency(e.amount, e.currency, e.amountInInr)}
-                    <span className="inline-block mt-1 px-2 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                    <span className="inline-block mt-1.5 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-600 text-[9px] font-black rounded-full uppercase tracking-wider font-mono">
                       {e.splitType}
                     </span>
                   </div>
@@ -285,13 +289,13 @@ export default function GroupDetail() {
               ))}
 
               {expenses.length === 0 && (
-                <div className="p-10 text-center">
-                  <div className="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <svg className="w-6 h-6 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="p-10 text-center bg-white">
+                  <div className="w-14 h-14 bg-slate-50 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <p className="text-slate-500 font-semibold text-sm">No expenses yet</p>
+                  <p className="text-slate-500 font-bold text-sm">No expenses yet</p>
                   <p className="text-xs text-slate-400 mt-0.5">Add an expense above or import from CSV.</p>
                 </div>
               )}
@@ -300,18 +304,18 @@ export default function GroupDetail() {
           
           {/* Dashboard Tools (CSV Import) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link id="tour-import-csv" to={`/groups/${groupId}/import`} className="bg-white hover:border-teal-200 hover:shadow-md transition-all duration-200 border border-slate-200 rounded-2xl p-5 flex items-center justify-center gap-3 text-teal-800 font-semibold shadow-sm">
-              <svg className="w-5 h-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            <Link id="tour-import-csv" to={`/groups/${groupId}/import`} className="bg-white hover:bg-slate-50 transition-all border-2 border-slate-900 rounded-2xl p-5 flex items-center justify-center gap-3 text-slate-900 font-extrabold shadow-[3px_3px_0px_#0f172a] hover:shadow-[4.5px_4.5px_0px_#0f172a] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] active:translate-x-[0px] active:translate-y-[0px] active:shadow-[1px_1px_0px_#0f172a]">
+              <svg className="w-5 h-5 text-slate-900 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
               Import Expenses from CSV
             </Link>
             <button
               onClick={() => setIsSettleUpOpen(true)}
-              className="bg-white hover:border-teal-200 hover:shadow-md transition-all duration-200 border border-slate-200 rounded-2xl p-5 flex items-center justify-center gap-3 text-teal-800 font-semibold shadow-sm"
+              className="bg-white hover:bg-slate-50 transition-all border-2 border-slate-900 rounded-2xl p-5 flex items-center justify-center gap-3 text-slate-900 font-extrabold shadow-[3px_3px_0px_#0f172a] hover:shadow-[4.5px_4.5px_0px_#0f172a] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] active:translate-x-[0px] active:translate-y-[0px] active:shadow-[1px_1px_0px_#0f172a]"
             >
-              <svg className="w-5 h-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg className="w-5 h-5 text-slate-900 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Record a Settlement Payment
             </button>
@@ -322,12 +326,12 @@ export default function GroupDetail() {
         <div className="space-y-6">
           
           {/* Members Card */}
-          <div id="tour-members-card" className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h3 className="text-lg font-semibold text-slate-900">Members</h3>
+          <div id="tour-members-card" className="bg-white rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_#0f172a] overflow-hidden">
+            <div className="px-6 py-5 border-b-2 border-slate-900 flex justify-between items-center bg-slate-50/50">
+              <h3 className="text-lg font-black text-slate-900">Members</h3>
               <button
                 onClick={() => setIsAddingMember(!isAddingMember)}
-                className="text-xs font-bold text-teal-700 hover:text-teal-800 flex items-center gap-1"
+                className="text-xs font-extrabold text-teal-800 hover:text-teal-950 flex items-center gap-1"
               >
                 {isAddingMember ? 'Cancel' : '+ Add'}
               </button>
@@ -335,7 +339,7 @@ export default function GroupDetail() {
 
             {/* Add Member Form */}
             {isAddingMember && (
-              <form onSubmit={handleAddMember} className="p-4 border-b border-slate-100 bg-teal-50/20 space-y-3">
+              <form onSubmit={handleAddMember} className="p-4 border-b-2 border-slate-900 bg-teal-50/20 space-y-3">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
                     Select User
@@ -344,7 +348,7 @@ export default function GroupDetail() {
                     required
                     value={selectedUserId}
                     onChange={(e) => setSelectedUserId(e.target.value)}
-                    className="form-input text-sm w-full py-1.5"
+                    className="w-full text-sm py-1.5 rounded-xl border-2 border-slate-900 bg-white px-3 text-slate-900 font-semibold focus:outline-none focus:ring-0"
                   >
                     <option value="">-- Choose User --</option>
                     {availableUsers.map((u) => (
@@ -364,14 +368,14 @@ export default function GroupDetail() {
                     required
                     value={joinedAt}
                     onChange={(e) => setJoinedAt(e.target.value)}
-                    className="form-input text-sm w-full py-1.5"
+                    className="w-full text-sm py-1.5 rounded-xl border-2 border-slate-900 bg-white px-3 text-slate-900 font-semibold focus:outline-none focus:ring-0"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={actionLoading || !selectedUserId}
-                  className="btn btn-primary text-xs w-full py-2"
+                  className="w-full py-2.5 rounded-xl border-2 border-slate-900 bg-teal-800 hover:bg-teal-700 text-white font-extrabold text-xs shadow-[2.5px_2.5px_0px_#0f172a] hover:shadow-[0.5px_0.5px_0px_#0f172a] hover:translate-x-[1.5px] hover:translate-y-[1.5px] transition-all disabled:opacity-50 disabled:pointer-events-none"
                 >
                   {actionLoading ? 'Adding...' : 'Add to Group'}
                 </button>
@@ -380,8 +384,8 @@ export default function GroupDetail() {
 
             {/* Soft-Remove Member Form */}
             {removingMemberId && (
-              <form onSubmit={handleRemoveMember} className="p-4 border-b border-slate-100 bg-red-50/20 space-y-3">
-                <p className="text-xs font-semibold text-red-700">
+              <form onSubmit={handleRemoveMember} className="p-4 border-b-2 border-slate-900 bg-red-50/20 space-y-3">
+                <p className="text-xs font-bold text-red-700">
                   Select Leave Date for {balances.find(b => b.user.id === removingMemberId)?.user.name}:
                 </p>
                 <div>
@@ -390,21 +394,21 @@ export default function GroupDetail() {
                     required
                     value={leftAt}
                     onChange={(e) => setLeftAt(e.target.value)}
-                    className="form-input text-sm w-full py-1.5"
+                    className="w-full text-sm py-1.5 rounded-xl border-2 border-slate-900 bg-white px-3 text-slate-900 font-semibold focus:outline-none focus:ring-0"
                   />
                 </div>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setRemovingMemberId(null)}
-                    className="btn btn-secondary text-xs w-full py-1.5"
+                    className="w-full py-2 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 text-slate-900 font-bold text-xs shadow-[2px_2px_0px_#0f172a] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#0f172a] transition-all"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="btn btn-danger text-xs w-full py-1.5"
+                    className="w-full py-2 rounded-xl border-2 border-slate-900 bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-[2px_2px_0px_#0f172a] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#0f172a] transition-all disabled:opacity-50 disabled:pointer-events-none"
                   >
                     {actionLoading ? 'Removing...' : 'Confirm'}
                   </button>
@@ -414,16 +418,16 @@ export default function GroupDetail() {
 
             <div className="p-4 space-y-3">
               {/* Active Members */}
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Active</p>
+              <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Active</p>
               
               {balances.filter(b => !b.leftAt).map((b) => (
-                <div key={b.user.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors">
-                  <div className="w-9 h-9 rounded-full bg-teal-50 text-teal-800 flex items-center justify-center font-bold text-sm uppercase">
+                <div key={b.user.id} className="flex items-center gap-3 p-2.5 rounded-xl border-2 border-transparent hover:border-slate-900 hover:bg-slate-50/50 transition-all group">
+                  <div className="w-9 h-9 rounded-full bg-teal-100 text-slate-900 flex items-center justify-center font-black border-2 border-slate-900 shadow-[1px_1px_0px_#0f172a] text-sm uppercase">
                     {b.user.name.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-slate-800 text-sm truncate">{b.user.name}</p>
-                    <p className="text-[10px] text-slate-400 truncate">
+                    <p className="font-extrabold text-slate-900 text-sm truncate">{b.user.name}</p>
+                    <p className="text-[10px] text-slate-400 font-bold mt-0.5">
                       Joined {new Date(b.joinedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
@@ -436,7 +440,7 @@ export default function GroupDetail() {
                         setLeftAt(new Date().toISOString().slice(0, 10));
                         setIsAddingMember(false);
                       }}
-                      className="text-[10px] font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-md transition-colors"
+                      className="text-[10px] font-black text-rose-800 bg-[#fce8e6] border border-rose-800/20 hover:bg-rose-100 px-2 py-1 rounded-md transition-colors"
                     >
                       Remove
                     </button>
@@ -446,22 +450,22 @@ export default function GroupDetail() {
 
               {/* Inactive (Left) Members */}
               {balances.some(b => b.leftAt) && (
-                <div className="pt-4 border-t border-slate-100 space-y-3">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Past Members</p>
+                <div className="pt-4 border-t-2 border-dashed border-slate-200 space-y-3">
+                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Past Members</p>
                   {balances.filter(b => b.leftAt).map((b) => (
-                    <div key={b.user.id} className="flex items-center gap-3 p-2 rounded-xl bg-slate-50/50 opacity-75">
-                      <div className="w-9 h-9 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm uppercase">
+                    <div key={b.user.id} className="flex items-center gap-3 p-2.5 rounded-xl border-2 border-transparent bg-slate-50/50 opacity-75">
+                      <div className="w-9 h-9 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm uppercase border-2 border-slate-400">
                         {b.user.name.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-slate-500 text-sm truncate">{b.user.name}</p>
-                        <p className="text-[10px] text-slate-400 truncate">
+                        <p className="font-bold text-slate-500 text-sm truncate">{b.user.name}</p>
+                        <p className="text-[10px] text-slate-400 font-medium truncate">
                           {new Date(b.joinedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} - {new Date(b.leftAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                         </p>
                       </div>
                       <button
                         onClick={() => handleReaddMember(b.user.id)}
-                        className="text-[10px] font-bold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 px-2 py-1 rounded-md transition-colors"
+                        className="text-[10px] font-black text-teal-800 bg-teal-50 border border-teal-800/20 hover:bg-teal-100 px-2 py-1 rounded-md transition-colors"
                       >
                         Re-add
                       </button>

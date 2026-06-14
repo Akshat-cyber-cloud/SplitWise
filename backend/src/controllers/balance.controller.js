@@ -61,49 +61,50 @@ async function _calcBalance(groupId, userId, joinedAt, leftAt) {
     },
   };
 
-  // Amount this user PAID (within window)
-  const paidRows = await prisma.expense.findMany({
-    where: { groupId, paidById: userId, ...dateFilter },
-    select: { id: true, description: true, date: true, amountInInr: true },
-  });
+  // Run the 4 database queries in parallel to avoid sequential network RTT overhead
+  const [paidRows, splitRows, sentPayments, receivedPayments] = await Promise.all([
+    // Amount this user PAID (within window)
+    prisma.expense.findMany({
+      where: { groupId, paidById: userId, ...dateFilter },
+      select: { id: true, description: true, date: true, amountInInr: true },
+    }),
+    // Amount this user OWES (share, within window)
+    prisma.expenseSplit.findMany({
+      where: {
+        userId,
+        expense: { groupId, ...dateFilter },
+      },
+      include: {
+        expense: { select: { id: true, description: true, date: true } },
+      },
+    }),
+    // Payments SENT by this user in the group
+    prisma.payment.findMany({
+      where: { groupId, fromUserId: userId },
+      select: {
+        id: true,
+        amount: true,
+        date: true,
+        toUserId: true,
+        toUser: { select: { name: true } },
+      },
+    }),
+    // Payments RECEIVED by this user in the group
+    prisma.payment.findMany({
+      where: { groupId, toUserId: userId },
+      select: {
+        id: true,
+        amount: true,
+        date: true,
+        fromUserId: true,
+        fromUser: { select: { name: true } },
+      },
+    }),
+  ]);
+
   const totalPaid = paidRows.reduce((s, e) => s + Number(e.amountInInr), 0);
-
-  // Amount this user OWES (share, within window)
-  const splitRows = await prisma.expenseSplit.findMany({
-    where: {
-      userId,
-      expense: { groupId, ...dateFilter },
-    },
-    include: {
-      expense: { select: { id: true, description: true, date: true } },
-    },
-  });
   const totalOwed = splitRows.reduce((s, r) => s + Number(r.shareAmount), 0);
-
-  // Payments SENT by this user in the group
-  const sentPayments = await prisma.payment.findMany({
-    where: { groupId, fromUserId: userId },
-    select: {
-      id: true,
-      amount: true,
-      date: true,
-      toUserId: true,
-      toUser: { select: { name: true } },
-    },
-  });
   const totalSent = sentPayments.reduce((s, p) => s + Number(p.amount), 0);
-
-  // Payments RECEIVED by this user in the group
-  const receivedPayments = await prisma.payment.findMany({
-    where: { groupId, toUserId: userId },
-    select: {
-      id: true,
-      amount: true,
-      date: true,
-      fromUserId: true,
-      fromUser: { select: { name: true } },
-    },
-  });
   const totalReceived = receivedPayments.reduce((s, p) => s + Number(p.amount), 0);
 
   // Net = paid - owed + sent - received

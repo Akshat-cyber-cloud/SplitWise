@@ -4,11 +4,20 @@ const { asyncHandler } = require('../middleware/asyncHandler');
 const createGroup = asyncHandler(async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'name is required' });
-  const group = await prisma.group.create({ data: { name } });
-  // auto-add creator as member
-  await prisma.groupMembership.create({
-    data: { groupId: group.id, userId: req.user.id, joinedAt: new Date() },
+
+  // Use a nested write transaction to create both the group and its membership in a single database round-trip
+  const group = await prisma.group.create({
+    data: {
+      name,
+      memberships: {
+        create: {
+          userId: req.user.id,
+          joinedAt: new Date()
+        }
+      }
+    }
   });
+
   res.status(201).json(group);
 });
 
