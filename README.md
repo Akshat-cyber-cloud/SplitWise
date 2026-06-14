@@ -4,7 +4,7 @@
 
 ---
 
-## 🔗 Links
+## Links
 
 | Resource | URL |
 |---|---|
@@ -14,14 +14,14 @@
 
 ---
 
-## 🤖 AI Tools Used
+## AI Tools Used
 
 - **Antigravity IDE (Google DeepMind)** — used throughout for scaffolding, route stubs, Prisma schema design, balance calculation logic, anomaly detector patterns, UI components (LandingPage, GroupDetail, BalancePage), and doc templates.  
   See [`docs/AI_USAGE.md`](./docs/AI_USAGE.md) for detailed prompts and three cases where the AI was wrong.
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Prerequisites
 
