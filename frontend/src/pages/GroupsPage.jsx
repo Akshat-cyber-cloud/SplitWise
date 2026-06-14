@@ -67,7 +67,7 @@ export default function GroupsPage() {
       )}
 
       {/* Top Level Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <div id="tour-summary-cards" className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-center">
           <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">Total Balance</p>
           <p className={`text-3xl font-bold ${summary.totalBalance > 0 ? 'text-green-600' : summary.totalBalance < 0 ? 'text-red-600' : 'text-slate-900'}`}>
@@ -84,7 +84,7 @@ export default function GroupsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between">
+      <div id="tour-create-group" className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between">
         <div>
           <h3 className="text-lg font-bold text-slate-900">Create New Group</h3>
           <p className="text-sm text-slate-500 mt-1">Start tracking expenses for a new trip or apartment.</p>
@@ -106,9 +106,9 @@ export default function GroupsPage() {
 
       <h2 className="text-xl font-bold text-slate-900 mb-4">Your Groups</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {summary.groups.map((g) => (
-          <Link key={g.groupId} to={`/groups/${g.groupId}`} className="block group">
+      <div id="tour-groups-list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {summary.groups.map((g, idx) => (
+          <Link key={g.groupId} to={`/groups/${g.groupId}`} id={idx === 0 ? "tour-first-group" : undefined} className="block group">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 h-full transition-all duration-200 group-hover:shadow-md group-hover:border-teal-200 group-hover:-translate-y-1 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-4">

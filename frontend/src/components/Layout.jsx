@@ -1,5 +1,6 @@
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import UserTour from './UserTour';
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -50,6 +51,24 @@ export default function Layout() {
               Settings
             </div>
           </NavLink>
+
+          <button 
+            onClick={() => {
+              if (user?.id) {
+                localStorage.removeItem(`sharedsplit_tour_completed_${user.id}`);
+              }
+              localStorage.removeItem('sharedsplit_tour_completed');
+              window.location.reload();
+            }}
+            className="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all duration-150"
+          >
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Restart Tour
+            </div>
+          </button>
         </nav>
         
         <div className="flex-1" />
@@ -69,6 +88,7 @@ export default function Layout() {
       <main className="flex-1 p-8 md:p-12 overflow-y-auto max-w-5xl mx-auto w-full">
         <Outlet />
       </main>
+      <UserTour />
     </div>
   );
 }

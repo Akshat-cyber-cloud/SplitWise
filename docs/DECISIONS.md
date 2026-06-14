@@ -62,6 +62,12 @@ Store both `amount` (original) and `amount_in_inr` (converted). Never discard th
 
 ## D7: ORM Choice (Prisma vs raw SQL)
 
-**Decision**: Prisma for schema management and CRUD; the balance query is intentionally written as explicit Prisma calls (not a single mega raw-SQL query) so every step is readable and defensible.
-
 **Tradeoff**: A raw SQL GROUP BY would be faster at scale, but Prisma is easier to explain line-by-line in a 45-min session.
+
+---
+
+## D8: Handling of Guest Users (Kabir)
+
+**Decision**: Option B — Exclude "Dev's friend Kabir" from the splits entirely and redistribute his share equally among the actual members in `split_with`. Kabir is not registered as a user or added as a group member.
+
+**Why**: Kabir is a one-time guest, not a permanent flatmate. Creating a user account and adding him as a permanent member would clutter the group member list, settlement algorithms, and ledger balances. Excluding him from the split and redistributing his share is cleaner and keeps the database correct.

@@ -132,6 +132,19 @@ export default function ImportPage() {
               </button>
             </div>
           )}
+
+          {result.normalizations && result.normalizations.length > 0 && (
+            <div className="mt-6 border-t border-slate-100 pt-6">
+              <h4 className="text-sm font-bold text-slate-900 mb-3">Normalizations Applied</h4>
+              <ul className="space-y-2">
+                {result.normalizations.map((n, i) => (
+                  <li key={i} className="text-xs text-slate-600 bg-slate-50 border border-slate-100 rounded-xl p-3 font-medium">
+                    {n}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
 

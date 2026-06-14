@@ -10,17 +10,41 @@ function parseAmount(amountStr) {
 
 function parseDate(dateStr) {
   if (!dateStr) return null;
-  const dmyMatch = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  const clean = dateStr.trim();
+  
+  const monthMap = {
+    jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12
+  };
+  
+  const m1 = clean.toLowerCase().match(/^([a-z]{3,9})[-/\s](\d{1,2})$/);
+  if (m1) {
+    const month = monthMap[m1[1].slice(0, 3)];
+    const day = m1[2].padStart(2, '0');
+    if (month) {
+      return new Date(`2026-${String(month).padStart(2, '0')}-${day}`);
+    }
+  }
+
+  const m2 = clean.toLowerCase().match(/^(\d{1,2})[-/\s]([a-z]{3,9})$/);
+  if (m2) {
+    const day = m2[1].padStart(2, '0');
+    const month = monthMap[m2[2].slice(0, 3)];
+    if (month) {
+      return new Date(`2026-${String(month).padStart(2, '0')}-${day}`);
+    }
+  }
+
+  const dmyMatch = clean.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
   if (dmyMatch) {
     const [_, day, month, year] = dmyMatch;
     return new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
   }
-  const ymdMatch = dateStr.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+  const ymdMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
   if (ymdMatch) {
     const [_, year, month, day] = ymdMatch;
     return new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
   }
-  const d = new Date(dateStr);
+  const d = new Date(clean);
   return isNaN(d.getTime()) ? null : d;
 }
 

@@ -172,6 +172,7 @@ export default function GroupDetail() {
         </div>
         <div className="flex flex-wrap gap-3">
           <button
+            id="tour-settle-up-btn"
             onClick={() => setIsSettleUpOpen(true)}
             className="btn btn-secondary flex items-center gap-1.5"
           >
@@ -180,7 +181,7 @@ export default function GroupDetail() {
             </svg>
             Settle Up
           </button>
-          <Link to={`/groups/${groupId}/expenses`} className="btn btn-primary flex items-center gap-1.5">
+          <Link id="tour-add-expense-btn" to={`/groups/${groupId}/expenses`} className="btn btn-primary flex items-center gap-1.5">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -201,7 +202,7 @@ export default function GroupDetail() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Group Balance Summary Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="tour-balance-summary" className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <h3 className="text-lg font-semibold text-slate-900">Group Balance Summary</h3>
               <Link to={`/groups/${groupId}/balances`} className="text-sm font-semibold text-teal-700 hover:text-teal-800 flex items-center gap-1">
@@ -252,7 +253,7 @@ export default function GroupDetail() {
           </div>
 
           {/* Recent Expenses List */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="tour-recent-expenses" className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <h3 className="text-lg font-semibold text-slate-900">Recent Expenses</h3>
               <Link to={`/groups/${groupId}/expenses`} className="text-sm font-semibold text-teal-700 hover:text-teal-800">
@@ -299,7 +300,7 @@ export default function GroupDetail() {
           
           {/* Dashboard Tools (CSV Import) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link to={`/groups/${groupId}/import`} className="bg-white hover:border-teal-200 hover:shadow-md transition-all duration-200 border border-slate-200 rounded-2xl p-5 flex items-center justify-center gap-3 text-teal-800 font-semibold shadow-sm">
+            <Link id="tour-import-csv" to={`/groups/${groupId}/import`} className="bg-white hover:border-teal-200 hover:shadow-md transition-all duration-200 border border-slate-200 rounded-2xl p-5 flex items-center justify-center gap-3 text-teal-800 font-semibold shadow-sm">
               <svg className="w-5 h-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
@@ -321,7 +322,7 @@ export default function GroupDetail() {
         <div className="space-y-6">
           
           {/* Members Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div id="tour-members-card" className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <h3 className="text-lg font-semibold text-slate-900">Members</h3>
               <button

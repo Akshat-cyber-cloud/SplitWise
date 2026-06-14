@@ -117,10 +117,11 @@ model Payment {
 }
 
 model ImportBatch {
-  id        Int      @id @default(autoincrement())
-  filename  String
-  createdAt DateTime @default(now()) @map("created_at")
-  createdBy Int?     @map("created_by")
+  id             Int             @id @default(autoincrement())
+  filename       String
+  createdAt      DateTime        @default(now()) @map("created_at")
+  createdBy      Int?            @map("created_by")
+  normalizations String[]        @default([])
 
   expenses  Expense[]
   anomalies ImportAnomaly[]
