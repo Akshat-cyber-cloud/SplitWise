@@ -2,6 +2,7 @@ const prisma = require('../config/prisma');
 const { asyncHandler } = require('../middleware/asyncHandler');
 const { computeSplits } = require('../services/split.service');
 const { getExchangeRate } = require('../services/currency.service');
+const { parseAmount, parseDate } = require('../services/csv.service');
 
 // GET /api/anomalies/batches/:batchId
 const listAnomalies = asyncHandler(async (req, res) => {
@@ -29,10 +30,20 @@ const resolveAnomaly = asyncHandler(async (req, res) => {
     try {
       const currency = (row.currency || 'INR').trim().toUpperCase();
       let exchangeRate = 1;
-      let amountInInr = Number(row.amount);
+      const parsedAmt = parseAmount(row.amount);
+      if (isNaN(parsedAmt)) {
+        return res.status(400).json({ error: `Amount "${row.amount}" is not a valid number.` });
+      }
+
+      const parsedDt = parseDate(row.date);
+      if (!parsedDt) {
+        return res.status(400).json({ error: `Date "${row.date}" is not in a recognisable format.` });
+      }
+
+      let amountInInr = parsedAmt;
       if (currency !== 'INR') {
-        exchangeRate = await getExchangeRate(currency, 'INR', row.date);
-        amountInInr = Number(row.amount) * exchangeRate;
+        exchangeRate = await getExchangeRate(currency, 'INR', parsedDt);
+        amountInInr = parsedAmt * exchangeRate;
       }
       const members = await prisma.groupMembership.findMany({
         where: { groupId: Number(groupId), leftAt: null },
@@ -41,24 +52,29 @@ const resolveAnomaly = asyncHandler(async (req, res) => {
       const splits = computeSplits('EQUAL', amountInInr, {
         userIds: members.map((m) => m.userId),
       });
-      const paidByUser = await prisma.user.findFirst({ where: { name: row.paid_by } });
-      if (paidByUser) {
-        await prisma.expense.create({
-          data: {
-            groupId:       Number(groupId),
-            paidById:      paidByUser.id,
-            amount:        Number(row.amount),
-            currency,
-            amountInInr,
-            exchangeRate,
-            description:   row.description,
-            date:          new Date(row.date),
-            splitType:     'EQUAL',
-            importBatchId: anomaly.batchId,
-            splits: { create: splits },
-          },
-        });
+
+      const paidByUser = await prisma.user.findFirst({
+        where: { name: { equals: row.paid_by?.trim(), mode: 'insensitive' } }
+      });
+      if (!paidByUser) {
+        return res.status(400).json({ error: `Payer "${row.paid_by}" not found in database.` });
       }
+
+      await prisma.expense.create({
+        data: {
+          groupId:       Number(groupId),
+          paidById:      paidByUser.id,
+          amount:        parsedAmt,
+          currency,
+          amountInInr,
+          exchangeRate,
+          description:   row.description,
+          date:          parsedDt,
+          splitType:     'EQUAL',
+          importBatchId: anomaly.batchId,
+          splits: { create: splits },
+        },
+      });
     } catch (e) {
       return res.status(500).json({ error: `Failed to commit row: ${e.message}` });
     }

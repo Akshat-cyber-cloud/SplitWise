@@ -1,3 +1,5 @@
+const { parseAmount, parseDate } = require('./csv.service');
+
 /**
  * Anomaly detectors for CSV import.
  *
@@ -27,7 +29,7 @@ function detectDuplicate(row, allRows) {
 
 // 2. Negative amount detector
 function detectNegativeAmount(row) {
-  const amount = Number(row.amount);
+  const amount = parseAmount(row.amount);
   if (!isNaN(amount) && amount < 0) {
     return {
       detector: 'negative_amount',
@@ -40,7 +42,7 @@ function detectNegativeAmount(row) {
 
 // 3. Zero amount detector
 function detectZeroAmount(row) {
-  const amount = Number(row.amount);
+  const amount = parseAmount(row.amount);
   if (!isNaN(amount) && amount === 0) {
     return {
       detector: 'zero_amount',
@@ -55,11 +57,11 @@ function detectBadDate(row) {
   if (!row.date) {
     return { detector: 'missing_date', suggestedAction: 'Reject: date column is empty.' };
   }
-  const d = new Date(row.date);
-  if (isNaN(d.getTime())) {
+  const d = parseDate(row.date);
+  if (!d) {
     return {
       detector: 'bad_date_format',
-      suggestedAction: `Reject: "${row.date}" is not a recognisable date. Expected YYYY-MM-DD.`,
+      suggestedAction: `Reject: "${row.date}" is not a recognisable date. Expected DD-MM-YYYY or YYYY-MM-DD.`,
     };
   }
   return null;
@@ -106,9 +108,24 @@ function detectMissingFields(row) {
   return null;
 }
 
+// 8. Invalid amount detector (non-numeric)
+function detectInvalidAmount(row) {
+  if (row.amount) {
+    const amount = parseAmount(row.amount);
+    if (isNaN(amount)) {
+      return {
+        detector: 'invalid_amount',
+        suggestedAction: `Reject: "${row.amount}" is not a valid number.`,
+      };
+    }
+  }
+  return null;
+}
+
 // Registry — order matters (cheap checks first)
 const DETECTORS = [
   detectMissingFields,
+  detectInvalidAmount,
   detectBadDate,
   detectZeroAmount,
   detectNegativeAmount,

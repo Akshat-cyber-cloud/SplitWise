@@ -18,8 +18,9 @@ async function getExchangeRate(from, to, date) {
   if (rateCache.has(cacheKey)) return rateCache.get(cacheKey);
 
   try {
-    const url = `https://api.exchangerate.host/${dateStr}?base=${from}&symbols=${to}`;
-    const { data } = await axios.get(url, { timeout: 5000 });
+    const key = process.env.EXCHANGE_RATE_API_KEY || '';
+    const url = `https://api.exchangerate.host/${dateStr}?access_key=${key}&base=${from}&symbols=${to}`;
+    const { data } = await axios.get(url, { timeout: 1000 });
     const rate = data?.rates?.[to];
     if (!rate) throw new Error('Rate not found in response');
     rateCache.set(cacheKey, rate);
